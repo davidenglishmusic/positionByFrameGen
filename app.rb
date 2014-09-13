@@ -32,7 +32,6 @@ class PositionByFrameGen
       arr.push([frame, newCoordinate])
     end
     arr.push([@endingFrame, @endingCoordinate])
-    arr
   end
 
 end
