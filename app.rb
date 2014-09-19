@@ -12,6 +12,19 @@ class PositionByFrameGen
     @verticalHalf = @verticalCoordinateDifference / @TWO
     @midpoint = calculateMidpoint()
     @totalNumberOfFrames = @endingFrame - @startingFrame
+    @direction = determineDirection()
+  end
+
+  def determineDirection
+    if @endingCoordinate[0] > @startingCoordinate[0] && @endingCoordinate[1] > @startingCoordinate[1]
+      "forwardAndUp"
+    elsif @endingCoordinate[0] > @startingCoordinate[0]
+      "forwardAndDown"
+    elsif @endingCoordinate[1] > @startingCoordinate[1]
+      "backAndUp"
+    else
+      "backAndDown"
+    end
   end
 
   def calculateMidpoint()
@@ -40,12 +53,41 @@ class PositionByFrameGen
     xIncrement = (@endingCoordinate[0] - @startingCoordinate[0].abs).to_f/@totalNumberOfFrames
     currentXCoordinate = @startingCoordinate[0]
     arr.push([@startingFrame, @startingCoordinate])
-    ((@startingFrame + 1)..(@endingFrame - 1)).each do |frame|
-      currentXCoordinate += xIncrement
-      newCoordinate = [currentXCoordinate, calculateY(currentXCoordinate)]
-      arr.push([frame, newCoordinate])
+    case @direction
+    when "forwardAndUp"
+      arr = forwardAndUp(arr, xIncrement)
+    when "forwardAndDown"
+      arr = (forwardAndDown(arr, xIncrement))
+    when "backAndUp"
+      arr.push(backAndUp(xIncrement, currentXCoordinate))
+    else
+      arr.push(backAndDown(xIncrement, currentXCoordinate))
     end
     arr.push([@endingFrame, @endingCoordinate])
+  end
+
+  def forwardAndUp(arr, xIncrement)
+    currentXCoordinate = @startingCoordinate[0] + xIncrement
+    ((@startingFrame + 1)..(@endingFrame - 1)).each do |frame|
+      arr.push([frame,[currentXCoordinate, calculateY(currentXCoordinate)]])
+      currentXCoordinate += xIncrement;
+    end
+    arr
+  end
+
+  def forwardAndDown(arr, xIncrement)
+    currentXCoordinate = @startingCoordinate[0] + xIncrement
+    ((@startingFrame + 1)..(@endingFrame - 1)).each do |frame|
+      arr.push([frame,[currentXCoordinate, @endingCoordinate[1] - calculateY(currentXCoordinate)]])
+      currentXCoordinate += xIncrement;
+    end
+    arr
+  end
+
+  def backAndUp
+  end
+
+  def backAndDown
   end
 
 end
