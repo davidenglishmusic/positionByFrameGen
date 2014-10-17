@@ -14,7 +14,6 @@ class PositionByFrameGen
 
   Two = 2
   Five = 5
-  Negative_five = -5
   Ten = 10
 
   def initialize(starting_coordinate, ending_coordinate, starting_frame, ending_frame)
