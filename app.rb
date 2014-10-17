@@ -9,7 +9,7 @@ class PositionByFrameGen
   attr_accessor :horizontal_half
   attr_accessor :vertical_half
   attr_accessor :midpoint
-  attr_accessor :@total_number_of_frames
+  attr_accessor :total_number_of_frames
   attr_accessor :direction
 
   Two = 2
