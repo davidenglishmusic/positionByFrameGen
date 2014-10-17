@@ -12,9 +12,9 @@ class PositionByFrameGen
   attr_accessor :total_number_of_frames
   attr_accessor :direction
 
-  Two = 2
-  Five = 5
-  Ten = 10
+  TWO = 2
+  FIVE = 5
+  TEN = 10
 
   def initialize(starting_coordinate, ending_coordinate, starting_frame, ending_frame)
     @starting_coordinate = starting_coordinate
@@ -22,9 +22,9 @@ class PositionByFrameGen
     @starting_frame = starting_frame
     @ending_frame = ending_frame
     @horizontal_coordinate_difference = (@ending_coordinate[0]) - (@starting_coordinate[0]).abs
-    @horizontal_half = @horizontal_coordinate_difference / Two
+    @horizontal_half = @horizontal_coordinate_difference / TWO
     @vertical_coordinate_difference = (@ending_coordinate[1] - @starting_coordinate[1]).abs
-    @vertical_half = @vertical_coordinate_difference / Two
+    @vertical_half = @vertical_coordinate_difference / TWO
     @midpoint = calculate_midpoint()
     @total_number_of_frames = @ending_frame - @starting_frame
     @direction = determine_direction()
@@ -33,6 +33,10 @@ class PositionByFrameGen
   def determine_direction
     if @ending_coordinate[0] == @starting_coordinate[0] && @ending_coordinate[1] == @starting_coordinate[1]
       "none"
+    elsif @ending_coordinate[0] > @starting_coordinate[0] && @ending_coordinate[1] == @starting_coordinate[1]
+      "forward"
+    elsif @ending_coordinate[0] < @starting_coordinate[0] && @ending_coordinate[1] == @starting_coordinate[1]
+      "back"
     elsif @ending_coordinate[0] == @starting_coordinate[0] && @ending_coordinate[1] > @starting_coordinate[1]
       "up"
     elsif @ending_coordinate[0] == @starting_coordinate[0] && @ending_coordinate[1] < @starting_coordinate[1]
@@ -75,12 +79,16 @@ class PositionByFrameGen
 
   def get_all_frame_coordinates()
     arr = []
-    x_increment = (@ending_coordinate[0] - @starting_coordinate[0].abs).to_f/@total_number_of_frames
+    x_increment = (@ending_coordinate[0] - @starting_coordinate[0]).abs.to_f/@total_number_of_frames
     current_x_coordinate = @starting_coordinate[0]
     arr.push([@starting_frame, @starting_coordinate])
     case @direction
     when "none"
       arr = no_movement(arr)
+    when "forward"
+        arr = forward(arr, x_increment)
+    when "back"
+      arr = back(arr, x_increment)
     when "up"
       arr = up(arr)
     when "down"
@@ -114,16 +122,52 @@ class PositionByFrameGen
     initial_arr.concat(combined_arr)
   end
 
+  def forward(initial_arr, x_increment)
+    frame_arr = []
+    x_arr = []
+    y_arr = []
+    current_x_coordinate = @starting_coordinate[0] + x_increment
+    ((@starting_frame + 1)..(@ending_frame - 1)).each do |frame|
+      frame_arr.push(frame)
+      x_arr.push(current_x_coordinate)
+      current_x_coordinate += x_increment
+    end
+    x_arr.each do |x|
+      y_arr.push(@starting_coordinate[1])
+    end
+    coordinate_arr = x_arr.zip(y_arr)
+    combined_arr = frame_arr.zip(coordinate_arr)
+    initial_arr.concat(combined_arr)
+  end
+
+  def back(initial_arr, x_increment)
+    frame_arr = []
+    x_arr = []
+    y_arr = []
+    current_x_coordinate = @starting_coordinate[0] - x_increment
+    ((@starting_frame + 1)..(@ending_frame - 1)).each do |frame|
+      frame_arr.push(frame)
+      x_arr.push(current_x_coordinate)
+      current_x_coordinate -= x_increment
+    end
+    x_arr.each do |x|
+      y_arr.push(@starting_coordinate[1])
+    end
+    coordinate_arr = x_arr.zip(y_arr)
+    combined_arr = frame_arr.zip(coordinate_arr)
+    initial_arr.concat(combined_arr)
+  end
+
   def up(initial_arr)
-    @horizontal_coordinate_difference = Ten
-    @midpoint[0] = Five
+    @horizontal_coordinate_difference = TEN
+    @midpoint[0] = FIVE
     x_increment = 1
     forward_and_up(initial_arr, x_increment).each{ |x| x[1][0] = @starting_coordinate[0] }
   end
 
   def down(initial_arr)
-    @horizontal_coordinate_difference = Ten
-    @midpoint[0] = Five
+    @horizontal_coordinate_difference = TEN
+    @midpoint[0] = FIVE
     x_increment = 1
     forward_and_down(initial_arr, x_increment).each{ |x| x[1][0] = @starting_coordinate[0] }
   end
@@ -168,11 +212,11 @@ class PositionByFrameGen
     frame_arr = []
     x_arr = []
     y_arr = []
-    current_x_coordinate = @starting_coordinate[0] + x_increment
+    current_x_coordinate = @starting_coordinate[0] - x_increment
     ((@starting_frame + 1)..(@ending_frame - 1)).each do |frame|
       frame_arr.push(frame)
       x_arr.push(current_x_coordinate)
-      current_x_coordinate += x_increment
+      current_x_coordinate -= x_increment
     end
     x_arr.each do |x|
       y_arr.push(calculate_y(x))
@@ -186,11 +230,11 @@ class PositionByFrameGen
     frame_arr = []
     x_arr = []
     y_arr = []
-    current_x_coordinate = @starting_coordinate[0] + x_increment
+    current_x_coordinate = @starting_coordinate[0] - x_increment
     ((@starting_frame + 1)..(@ending_frame - 1)).each do |frame|
       frame_arr.push(frame)
       x_arr.push(current_x_coordinate)
-      current_x_coordinate += x_increment
+      current_x_coordinate -= x_increment
     end
     x_arr.each do |x|
       y_arr.push(calculate_y(x))

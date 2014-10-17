@@ -12,6 +12,8 @@ describe PositionByFrameGen do
     @test_object_007 = PositionByFrameGen.new([0,0],[0,-10],0,10)
     @test_object_008 = PositionByFrameGen.new([0,0],[0,10],0,10)
     @test_object_009 = PositionByFrameGen.new([0,0],[0,0],0,10)
+    @test_object_010 = PositionByFrameGen.new([-3,3],[3,3],0,10)
+    @test_object_011 = PositionByFrameGen.new([0,3],[-10,3],0,10)
   end
 
   describe "calculate_midpoint" do
@@ -62,6 +64,12 @@ describe PositionByFrameGen do
     end
     it "returns an array of each frame and it's coordinates when the starting coordinates are [0,0] and the end coordinates are [0,0]" do
       expect(@test_object_009.get_all_frame_coordinates()).to eq([[0, [0, 0]], [1, [0, 0]], [2, [0, 0]], [3, [0, 0]], [4, [0, 0]], [5, [0, 0]], [6, [0, 0]], [7, [0, 0]], [8, [0, 0]], [9, [0, 0]], [10, [0, 0]]])
+    end
+    it "returns an array of each frame and it's coordinates when the starting coordinates are [-3,3] and the end coordinates are [3,3]" do
+      expect(@test_object_010.get_all_frame_coordinates()).to eq([[0, [-3, 3]], [1, [-2.4, 3]], [2, [-1.7999999999999998, 3]], [3, [-1.1999999999999997, 3]], [4, [-0.5999999999999998, 3]], [5, [2.220446049250313e-16, 3]], [6, [0.6000000000000002, 3]], [7, [1.2000000000000002, 3]], [8, [1.8000000000000003, 3]], [9, [2.4000000000000004, 3]], [10, [3, 3]]])
+    end
+    it "returns an array of each frame and it's coordinates when the starting coordinates are [3,3] and the end coordinates are [-3,3]" do
+      expect(@test_object_011.get_all_frame_coordinates()).to eq([[0, [0, 3]], [1, [-1.0, 3]], [2, [-2.0, 3]], [3, [-3.0, 3]], [4, [-4.0, 3]], [5, [-5.0, 3]], [6, [-6.0, 3]], [7, [-7.0, 3]], [8, [-8.0, 3]], [9, [-9.0, 3]], [10, [-10, 3]]])
     end
   end
 
