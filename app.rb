@@ -21,7 +21,7 @@ class PositionByFrameGen
     @ending_coordinate = ending_coordinate
     @starting_frame = starting_frame
     @ending_frame = ending_frame
-    @horizontal_coordinate_difference = (@ending_coordinate[0]) - (@starting_coordinate[0]).abs
+    @horizontal_coordinate_difference = @ending_coordinate[0] - @starting_coordinate[0]
     @horizontal_half = @horizontal_coordinate_difference / TWO
     @vertical_coordinate_difference = (@ending_coordinate[1] - @starting_coordinate[1]).abs
     @vertical_half = @vertical_coordinate_difference / TWO
@@ -69,11 +69,12 @@ class PositionByFrameGen
   end
 
   def calculate_y(x)
+    #print_formula(x)
     #Amplitude * Math.sin((2 * Math::PI / frequency) * ( x - horizontal_offset)) + vertical_offset
     @vertical_half * Math.sin((Math::PI / @horizontal_coordinate_difference) * (x - @midpoint[0])) + @midpoint[1]
   end
 
-  def print_formula()
+  def print_formula(x)
     p "#{@vertical_half} * sin((pi / #{@horizontal_coordinate_difference}) * (x - #{@midpoint[0]})) + #{@midpoint[1]}"
   end
 
