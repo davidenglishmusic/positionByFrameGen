@@ -9,6 +9,8 @@ describe PositionByFrameGen do
     @test_object_004 = PositionByFrameGen.new([0,0],[-10,-10],0,10)
     @test_object_005 = PositionByFrameGen.new([2,7],[-8,-1],0,10)
     @test_object_006 = PositionByFrameGen.new([2,7],[8,1],0,10)
+    @test_object_007 = PositionByFrameGen.new([0,0],[0,-10],0,10)
+    @test_object_008 = PositionByFrameGen.new([0,0],[0,10],0,10)
   end
 
   describe "calculate_midpoint" do
@@ -50,6 +52,12 @@ describe PositionByFrameGen do
     end
     it "returns an array of each frame and it's coordinates when the starting coordinates are [2,7] and the end coordinates are [8,1]" do
       expect(@test_object_006.get_all_frame_coordinates()).to eq([[0, [2, 7]], [1, [2.6, 6.85316954888546]], [2, [3.2, 6.4270509831248415]], [3, [3.8000000000000003, 5.763355756877418]], [4, [4.4, 4.9270509831248415]], [5, [5.0, 4.0]], [6, [5.6, 3.0729490168751585]], [7, [6.199999999999999, 2.2366442431225813]], [8, [6.799999999999999, 1.572949016875158]], [9, [7.399999999999999, 1.1468304511145395]], [10, [8, 1]]])
+    end
+    it "returns an array of each frame and it's coordinates when the starting coordinates are [0,0] and the end coordinates are [0,-10]" do
+      expect(@test_object_007.get_all_frame_coordinates()).to eq([[0, [0, 0]], [1, [0, -0.24471741852423268]], [2, [0, -0.9549150281252627]], [3, [0, -2.061073738537634]], [4, [0, -3.4549150281252627]], [5, [0, -5.0]], [6, [0, -6.545084971874737]], [7, [0, -7.938926261462366]], [8, [0, -9.045084971874736]], [9, [0, -9.755282581475768]], [10, [0, -10]]])
+    end
+    it "returns an array of each frame and it's coordinates when the starting coordinates are [0,0] and the end coordinates are [0,10]" do
+      expect(@test_object_008.get_all_frame_coordinates()).to eq([[0, [0, 0]], [1, [0, 0.24471741852423268]], [2, [0, 0.9549150281252627]], [3, [0, 2.061073738537634]], [4, [0, 3.4549150281252627]], [5, [0, 5.0]], [6, [0, 6.545084971874737]], [7, [0, 7.938926261462366]], [8, [0, 9.045084971874736]], [9, [0, 9.755282581475768]], [10, [0, 10]]])
     end
   end
 

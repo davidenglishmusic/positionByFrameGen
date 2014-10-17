@@ -13,6 +13,9 @@ class PositionByFrameGen
   attr_accessor :direction
 
   Two = 2
+  Five = 5
+  Negative_five = -5
+  Ten = 10
 
   def initialize(starting_coordinate, ending_coordinate, starting_frame, ending_frame)
     @starting_coordinate = starting_coordinate
@@ -29,7 +32,11 @@ class PositionByFrameGen
   end
 
   def determine_direction
-    if @ending_coordinate[0] > @starting_coordinate[0] && @ending_coordinate[1] > @starting_coordinate[1]
+    if @ending_coordinate[0] == @starting_coordinate[0] && @ending_coordinate[1] > @starting_coordinate[1]
+      "up"
+    elsif @ending_coordinate[0] == @starting_coordinate[0] && @ending_coordinate[1] < @starting_coordinate[1]
+      "down"
+    elsif @ending_coordinate[0] > @starting_coordinate[0] && @ending_coordinate[1] > @starting_coordinate[1]
       "forwardAndUp"
     elsif @ending_coordinate[0] > @starting_coordinate[0]
       "forwardAndDown"
@@ -71,6 +78,10 @@ class PositionByFrameGen
     current_x_coordinate = @starting_coordinate[0]
     arr.push([@starting_frame, @starting_coordinate])
     case @direction
+    when "up"
+      arr = up(arr)
+    when "down"
+      arr = down(arr)
     when "forwardAndUp"
       arr = forward_and_up(arr, x_increment)
     when "forwardAndDown"
@@ -81,6 +92,20 @@ class PositionByFrameGen
       arr = back_and_down(arr, x_increment)
     end
     arr.push([@ending_frame, @ending_coordinate])
+  end
+
+  def up(initial_arr)
+    @horizontal_coordinate_difference = Ten
+    @midpoint[0] = Five
+    x_increment = 1
+    forward_and_up(initial_arr, x_increment).each{ |x| x[1][0] = @starting_coordinate[0] }
+  end
+
+  def down(initial_arr)
+    @horizontal_coordinate_difference = Ten
+    @midpoint[0] = Five
+    x_increment = 1
+    forward_and_down(initial_arr, x_increment).each{ |x| x[1][0] = @starting_coordinate[0] }
   end
 
   def forward_and_up(initial_arr, x_increment)
