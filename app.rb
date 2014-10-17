@@ -31,7 +31,9 @@ class PositionByFrameGen
   end
 
   def determine_direction
-    if @ending_coordinate[0] == @starting_coordinate[0] && @ending_coordinate[1] > @starting_coordinate[1]
+    if @ending_coordinate[0] == @starting_coordinate[0] && @ending_coordinate[1] == @starting_coordinate[1]
+      "none"
+    elsif @ending_coordinate[0] == @starting_coordinate[0] && @ending_coordinate[1] > @starting_coordinate[1]
       "up"
     elsif @ending_coordinate[0] == @starting_coordinate[0] && @ending_coordinate[1] < @starting_coordinate[1]
       "down"
@@ -77,6 +79,8 @@ class PositionByFrameGen
     current_x_coordinate = @starting_coordinate[0]
     arr.push([@starting_frame, @starting_coordinate])
     case @direction
+    when "none"
+      arr = no_movement(arr)
     when "up"
       arr = up(arr)
     when "down"
@@ -91,6 +95,23 @@ class PositionByFrameGen
       arr = back_and_down(arr, x_increment)
     end
     arr.push([@ending_frame, @ending_coordinate])
+  end
+
+  def no_movement(initial_arr)
+    frame_arr = []
+    x_arr = []
+    y_arr = []
+    current_x_coordinate = @starting_coordinate[0]
+    ((@starting_frame + 1)..(@ending_frame - 1)).each do |frame|
+      frame_arr.push(frame)
+      x_arr.push(current_x_coordinate)
+    end
+    x_arr.each do |x|
+      y_arr.push(@starting_coordinate[1])
+    end
+    coordinate_arr = x_arr.zip(y_arr)
+    combined_arr = frame_arr.zip(coordinate_arr)
+    initial_arr.concat(combined_arr)
   end
 
   def up(initial_arr)
