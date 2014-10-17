@@ -1,149 +1,150 @@
 class PositionByFrameGen
 
   attr_accessor :direction
-  attr_accessor :horizontalCoordinateDifference
-  attr_accessor :verticalCoordinateDifference
+  attr_accessor :horizontal_coordinate_difference
+  attr_accessor :vertical_coordinate_difference
 
-  def initialize(startingCoordinate, endingCoordinate, startingFrame, endingFrame)
-    @TWO = 2
-    @startingCoordinate = startingCoordinate
-    @endingCoordinate = endingCoordinate
-    @startingFrame = startingFrame
-    @endingFrame = endingFrame
-    @horizontalCoordinateDifference = (@endingCoordinate[0]) - (@startingCoordinate[0]).abs
-    @horizontalHalf = @horizontalCoordinateDifference / @TWO
-    @verticalCoordinateDifference = (@endingCoordinate[1] - @startingCoordinate[1]).abs
-    @verticalHalf = @verticalCoordinateDifference / @TWO
-    @midpoint = calculateMidpoint()
-    @totalNumberOfFrames = @endingFrame - @startingFrame
-    @direction = determineDirection()
+  Two = 2
+
+  def initialize(starting_coordinate, ending_coordinate, starting_frame, ending_frame)
+    @starting_coordinate = starting_coordinate
+    @ending_coordinate = ending_coordinate
+    @starting_frame = starting_frame
+    @ending_frame = ending_frame
+    @horizontal_coordinate_difference = (@ending_coordinate[0]) - (@starting_coordinate[0]).abs
+    @horizontal_half = @horizontal_coordinate_difference / Two
+    @vertical_coordinate_difference = (@ending_coordinate[1] - @starting_coordinate[1]).abs
+    @vertical_half = @vertical_coordinate_difference / Two
+    @midpoint = calculate_midpoint()
+    @total_number_of_frames = @ending_frame - @starting_frame
+    @direction = determine_direction()
   end
 
-  def determineDirection
-    if @endingCoordinate[0] > @startingCoordinate[0] && @endingCoordinate[1] > @startingCoordinate[1]
+  def determine_direction
+    if @ending_coordinate[0] > @starting_coordinate[0] && @ending_coordinate[1] > @starting_coordinate[1]
       "forwardAndUp"
-    elsif @endingCoordinate[0] > @startingCoordinate[0]
+    elsif @ending_coordinate[0] > @starting_coordinate[0]
       "forwardAndDown"
-    elsif @endingCoordinate[1] > @startingCoordinate[1]
+    elsif @ending_coordinate[1] > @starting_coordinate[1]
       "backAndUp"
     else
       "backAndDown"
     end
   end
 
-  def calculateMidpoint()
-    xMidpoint = 0
-    yMidpoint = 0
-    if @startingCoordinate[0] > @endingCoordinate[0]
-      xMidpoint = @endingCoordinate[0] - @horizontalHalf
+  def calculate_midpoint()
+    x_midpoint = 0
+    y_midpoint = 0
+    if @starting_coordinate[0] > @ending_coordinate[0]
+      x_midpoint = @ending_coordinate[0] - @horizontal_half
     else
-      xMidpoint = @endingCoordinate[0] - @horizontalHalf
+      x_midpoint = @ending_coordinate[0] - @horizontal_half
     end
-    if @startingCoordinate[1] > @endingCoordinate[1]
-      yMidpoint = @startingCoordinate[1] - @verticalHalf
+    if @starting_coordinate[1] > @ending_coordinate[1]
+      y_midpoint = @starting_coordinate[1] - @vertical_half
     else
-      yMidpoint = @endingCoordinate[1] - @verticalHalf
+      y_midpoint = @ending_coordinate[1] - @vertical_half
     end
-    [xMidpoint, yMidpoint]
+    [x_midpoint, y_midpoint]
   end
 
-  def calculateY(x)
-    #Amplitude * Math.sin((2 * Math::PI / Frequency) * ( x - horizontalOffset)) + verticalOffset
-    @verticalHalf * Math.sin((Math::PI / @horizontalCoordinateDifference) * (x - @midpoint[0])) + @midpoint[1]
+  def calculate_y(x)
+    #Amplitude * Math.sin((2 * Math::PI / frequency) * ( x - horizontal_offset)) + vertical_offset
+    @vertical_half * Math.sin((Math::PI / @horizontal_coordinate_difference) * (x - @midpoint[0])) + @midpoint[1]
   end
 
-  def printFormula()
-    p "#{@verticalHalf} * sin((pi / #{@horizontalCoordinateDifference}) * (x - #{@midpoint[0]})) + #{@midpoint[1]}"
+  def print_formula()
+    p "#{@vertical_half} * sin((pi / #{@horizontal_coordinate_difference}) * (x - #{@midpoint[0]})) + #{@midpoint[1]}"
   end
 
-  def getAllFrameCoordinates()
+  def get_all_frame_coordinates()
     arr = []
-    xIncrement = (@endingCoordinate[0] - @startingCoordinate[0].abs).to_f/@totalNumberOfFrames
-    currentXCoordinate = @startingCoordinate[0]
-    arr.push([@startingFrame, @startingCoordinate])
+    x_increment = (@ending_coordinate[0] - @starting_coordinate[0].abs).to_f/@total_number_of_frames
+    current_x_coordinate = @starting_coordinate[0]
+    arr.push([@starting_frame, @starting_coordinate])
     case @direction
     when "forwardAndUp"
-      arr = forwardAndUp(arr, xIncrement)
+      arr = forward_and_up(arr, x_increment)
     when "forwardAndDown"
-      arr = (forwardAndDown(arr, xIncrement))
+      arr = forward_and_down(arr, x_increment)
     when "backAndUp"
-      arr = backAndUp(arr, xIncrement)
+      arr = back_and_up(arr, x_increment)
     else
-      arr = backAndDown(arr, xIncrement)
+      arr = back_and_down(arr, x_increment)
     end
-    arr.push([@endingFrame, @endingCoordinate])
+    arr.push([@ending_frame, @ending_coordinate])
   end
 
-  def forwardAndUp(initialArr, xIncrement)
-    frameArr = []
-    xArr = []
-    yArr = []
-    currentXCoordinate = @startingCoordinate[0] + xIncrement
-    ((@startingFrame + 1)..(@endingFrame - 1)).each do |frame|
-      frameArr.push(frame)
-      xArr.push(currentXCoordinate)
-      currentXCoordinate += xIncrement
+  def forward_and_up(initial_arr, x_increment)
+    frame_arr = []
+    x_arr = []
+    y_arr = []
+    current_x_coordinate = @starting_coordinate[0] + x_increment
+    ((@starting_frame + 1)..(@ending_frame - 1)).each do |frame|
+      frame_arr.push(frame)
+      x_arr.push(current_x_coordinate)
+      current_x_coordinate += x_increment
     end
-    xArr.each do |x|
-      yArr.push(calculateY(x))
+    x_arr.each do |x|
+      y_arr.push(calculate_y(x))
     end
-    coordinateArr = xArr.zip(yArr)
-    combinedArr = frameArr.zip(coordinateArr)
-    initialArr.concat(combinedArr)
+    coordinate_arr = x_arr.zip(y_arr)
+    combined_arr = frame_arr.zip(coordinate_arr)
+    initial_arr.concat(combined_arr)
   end
 
-  def forwardAndDown(initialArr, xIncrement)
-    frameArr = []
-    xArr = []
-    yArr = []
-    currentXCoordinate = @startingCoordinate[0] + xIncrement
-    ((@startingFrame + 1)..(@endingFrame - 1)).each do |frame|
-      frameArr.push(frame)
-      xArr.push(currentXCoordinate)
-      currentXCoordinate += xIncrement
+  def forward_and_down(initial_arr, x_increment)
+    frame_arr = []
+    x_arr = []
+    y_arr = []
+    current_x_coordinate = @starting_coordinate[0] + x_increment
+    ((@starting_frame + 1)..(@ending_frame - 1)).each do |frame|
+      frame_arr.push(frame)
+      x_arr.push(current_x_coordinate)
+      current_x_coordinate += x_increment
     end
-    xArr.each do |x|
-      yArr.push(calculateY(x))
+    x_arr.each do |x|
+      y_arr.push(calculate_y(x))
     end
-    coordinateArr = xArr.zip(yArr.reverse)
-    combinedArr = frameArr.zip(coordinateArr)
-    initialArr.concat(combinedArr)
+    coordinate_arr = x_arr.zip(y_arr.reverse)
+    combined_arr = frame_arr.zip(coordinate_arr)
+    initial_arr.concat(combined_arr)
   end
 
-  def backAndUp(initialArr, xIncrement)
-    frameArr = []
-    xArr = []
-    yArr = []
-    currentXCoordinate = @startingCoordinate[0] + xIncrement
-    ((@startingFrame + 1)..(@endingFrame - 1)).each do |frame|
-      frameArr.push(frame)
-      xArr.push(currentXCoordinate)
-      currentXCoordinate += xIncrement
+  def back_and_up(initial_arr, x_increment)
+    frame_arr = []
+    x_arr = []
+    y_arr = []
+    current_x_coordinate = @starting_coordinate[0] + x_increment
+    ((@starting_frame + 1)..(@ending_frame - 1)).each do |frame|
+      frame_arr.push(frame)
+      x_arr.push(current_x_coordinate)
+      current_x_coordinate += x_increment
     end
-    xArr.each do |x|
-      yArr.push(calculateY(x))
+    x_arr.each do |x|
+      y_arr.push(calculate_y(x))
     end
-    coordinateArr = xArr.zip(yArr)
-    combinedArr = frameArr.zip(coordinateArr)
-    initialArr.concat(combinedArr)
+    coordinate_arr = x_arr.zip(y_arr)
+    combined_arr = frame_arr.zip(coordinate_arr)
+    initial_arr.concat(combined_arr)
   end
 
-  def backAndDown(initialArr, xIncrement)
-    frameArr = []
-    xArr = []
-    yArr = []
-    currentXCoordinate = @startingCoordinate[0] + xIncrement
-    ((@startingFrame + 1)..(@endingFrame - 1)).each do |frame|
-      frameArr.push(frame)
-      xArr.push(currentXCoordinate)
-      currentXCoordinate += xIncrement
+  def back_and_down(initial_arr, x_increment)
+    frame_arr = []
+    x_arr = []
+    y_arr = []
+    current_x_coordinate = @starting_coordinate[0] + x_increment
+    ((@starting_frame + 1)..(@ending_frame - 1)).each do |frame|
+      frame_arr.push(frame)
+      x_arr.push(current_x_coordinate)
+      current_x_coordinate += x_increment
     end
-    xArr.each do |x|
-      yArr.push(calculateY(x))
+    x_arr.each do |x|
+      y_arr.push(calculate_y(x))
     end
-    coordinateArr = xArr.zip(yArr.reverse)
-    combinedArr = frameArr.zip(coordinateArr)
-    initialArr.concat(combinedArr)
+    coordinate_arr = x_arr.zip(y_arr.reverse)
+    combined_arr = frame_arr.zip(coordinate_arr)
+    initial_arr.concat(combined_arr)
   end
 
 end
