@@ -1,8 +1,16 @@
 class PositionByFrameGen
 
-  attr_accessor :direction
+  attr_accessor :starting_coordinate
+  attr_accessor :ending_coordinate
+  attr_accessor :starting_frame
+  attr_accessor :ending_frame
   attr_accessor :horizontal_coordinate_difference
   attr_accessor :vertical_coordinate_difference
+  attr_accessor :horizontal_half
+  attr_accessor :vertical_half
+  attr_accessor :midpoint
+  attr_accessor :@total_number_of_frames
+  attr_accessor :direction
 
   Two = 2
 
