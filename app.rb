@@ -21,11 +21,11 @@ class PositionByFrameGen
     @ending_coordinate = ending_coordinate
     @starting_frame = starting_frame
     @ending_frame = ending_frame
-    @horizontal_coordinate_difference = @ending_coordinate[0] - @starting_coordinate[0]
+    @horizontal_coordinate_difference = calculate_absolute_distance(@starting_coordinate[0], @ending_coordinate[0])
     @horizontal_half = @horizontal_coordinate_difference / TWO
-    @vertical_coordinate_difference = (@ending_coordinate[1] - @starting_coordinate[1]).abs
+    @vertical_coordinate_difference = calculate_absolute_distance(@starting_coordinate[1], @ending_coordinate[1])
     @vertical_half = @vertical_coordinate_difference / TWO
-    @midpoint = calculate_midpoint()
+    calculate_midpoint()
     @total_number_of_frames = @ending_frame - @starting_frame
     @direction = determine_direction()
   end
@@ -52,20 +52,24 @@ class PositionByFrameGen
     end
   end
 
+  def calculate_absolute_distance(starting_coordinate, ending_coordinate)
+    (ending_coordinate - starting_coordinate).abs
+  end
+
   def calculate_midpoint()
     x_midpoint = 0
     y_midpoint = 0
-    if @starting_coordinate[0] > @ending_coordinate[0]
-      x_midpoint = @ending_coordinate[0] - @horizontal_half
+    if @ending_coordinate[0] > @starting_coordinate[0]
+      x_midpoint = @starting_coordinate[0] + @horizontal_half
     else
-      x_midpoint = @ending_coordinate[0] - @horizontal_half
+      x_midpoint = @ending_coordinate[0] + @horizontal_half
     end
-    if @starting_coordinate[1] > @ending_coordinate[1]
-      y_midpoint = @starting_coordinate[1] - @vertical_half
+    if @ending_coordinate[1] > @starting_coordinate[1]
+      y_midpoint = @starting_coordinate[1] + @vertical_half
     else
-      y_midpoint = @ending_coordinate[1] - @vertical_half
+      y_midpoint = @ending_coordinate[1] + @vertical_half
     end
-    [x_midpoint, y_midpoint]
+    @midpoint = [x_midpoint, y_midpoint]
   end
 
   def calculate_y(x)
@@ -222,7 +226,7 @@ class PositionByFrameGen
     x_arr.each do |x|
       y_arr.push(calculate_y(x))
     end
-    coordinate_arr = x_arr.zip(y_arr)
+    coordinate_arr = x_arr.zip(y_arr.reverse)
     combined_arr = frame_arr.zip(coordinate_arr)
     initial_arr.concat(combined_arr)
   end
@@ -240,7 +244,7 @@ class PositionByFrameGen
     x_arr.each do |x|
       y_arr.push(calculate_y(x))
     end
-    coordinate_arr = x_arr.zip(y_arr.reverse)
+    coordinate_arr = x_arr.zip(y_arr)
     combined_arr = frame_arr.zip(coordinate_arr)
     initial_arr.concat(combined_arr)
   end
