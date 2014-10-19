@@ -18,6 +18,7 @@ describe PositionByFrameGen do
     @test_object_013 = PositionByFrameGen.new([-5,-5],[3,3],0,10)
     @test_object_014 = PositionByFrameGen.new([3,3],[-5,-5],0,10)
     @test_object_015 = PositionByFrameGen.new([-1,-1],[-5,-5],0,10)
+    @test_object_016 = PositionByFrameGen.new([1,-1],[5,-5],0,10)
   end
 
   describe "calculate_absolute_distance" do
@@ -41,6 +42,9 @@ describe PositionByFrameGen do
     end
     it "returns [-3,-3] when the starting coordinates are [-1,-1] and the end coordinates are [-5,-5]" do
       expect(@test_object_015.calculate_midpoint()).to eq([-3,-3])
+    end
+    it "returns [3,-3] when the starting coordinates are [1,-1] and the end coordinates are [5,-5]" do
+      expect(@test_object_016.calculate_midpoint()).to eq([3,-3])
     end
   end
 
