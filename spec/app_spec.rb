@@ -19,6 +19,8 @@ describe PositionByFrameGen do
     @test_object_014 = PositionByFrameGen.new([3,3],[-5,-5],0,10)
     @test_object_015 = PositionByFrameGen.new([-1,-1],[-5,-5],0,10)
     @test_object_016 = PositionByFrameGen.new([1,-1],[5,-5],0,10)
+    @test_object_017 = PositionByFrameGen.new([3,2],[3,3],0,10)
+    @test_object_018 = PositionByFrameGen.new([3,3],[3,2],0,10)
   end
 
   describe "calculate_absolute_distance" do
@@ -96,6 +98,12 @@ describe PositionByFrameGen do
     end
     it "returns an array of each frame and it's coordinates when the starting coordinates are [-3,-3] and the end coordinates are [3,1]" do
       expect(@test_object_012.get_all_frame_coordinates()).to eq([[0, [-3, -3]], [1, [-1.8, -2.618033988749895]], [2, [-0.6000000000000001, -1.618033988749895]], [3, [0.5999999999999999, -0.38196601125010543]], [4, [1.7999999999999998, 0.6180339887498947]], [5, [3, 1]]])
+    end
+    it "returns an array of each frame and it's coordinates when the starting coordinates are [3,2] and the end coordinates are [3,3]" do
+      expect(@test_object_017.get_all_frame_coordinates()).to eq([[0, [3, 2]], [1, [3, 2.024471741852423]], [2, [3, 2.0954915028125263]], [3, [3, 2.2061073738537633]], [4, [3, 2.3454915028125263]], [5, [3, 2.5]], [6, [3, 2.6545084971874737]], [7, [3, 2.7938926261462367]], [8, [3, 2.9045084971874737]], [9, [3, 2.975528258147577]], [10, [3, 3]]])
+    end
+    it "returns an array of each frame and it's coordinates when the starting coordinates are [3,3] and the end coordinates are [3,2]" do
+      expect(@test_object_018.get_all_frame_coordinates()).to eq([[0, [3, 3]], [1, [3, 2.975528258147577]], [2, [3, 2.9045084971874737]], [3, [3, 2.7938926261462367]], [4, [3, 2.6545084971874737]], [5, [3, 2.5]], [6, [3, 2.3454915028125263]], [7, [3, 2.2061073738537633]], [8, [3, 2.0954915028125263]], [9, [3, 2.024471741852423]], [10, [3, 2]]])
     end
   end
 
