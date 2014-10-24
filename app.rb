@@ -119,143 +119,116 @@ class PositionByFrameGen
   def no_movement(initial_arr)
     frame_arr = []
     x_arr = []
-    y_arr = []
     current_x_coordinate = @starting_coordinate[0]
     ((@starting_frame + 1)..(@ending_frame - 1)).each do |frame|
       frame_arr.push(frame)
       x_arr.push(current_x_coordinate)
     end
-    x_arr.each do |x|
-      y_arr.push(@starting_coordinate[1])
-    end
+    y_arr = get_y_coordinates(x_arr)
     zip_combine_concat(initial_arr, frame_arr, x_arr, y_arr)
   end
 
   def forward(initial_arr, x_increment)
     frame_arr = []
     x_arr = []
-    y_arr = []
     current_x_coordinate = @starting_coordinate[0] + x_increment
     ((@starting_frame + 1)..(@ending_frame - 1)).each do |frame|
       frame_arr.push(frame)
       x_arr.push(current_x_coordinate)
       current_x_coordinate += x_increment
     end
-    x_arr.each do |x|
-      y_arr.push(@starting_coordinate[1])
-    end
+    y_arr = get_y_coordinates(x_arr)
     zip_combine_concat(initial_arr, frame_arr, x_arr, y_arr)
   end
 
   def back(initial_arr, x_increment)
     frame_arr = []
     x_arr = []
-    y_arr = []
     current_x_coordinate = @starting_coordinate[0] - x_increment
     ((@starting_frame + 1)..(@ending_frame - 1)).each do |frame|
       frame_arr.push(frame)
       x_arr.push(current_x_coordinate)
       current_x_coordinate -= x_increment
     end
-    x_arr.each do |x|
-      y_arr.push(@starting_coordinate[1])
-    end
+    y_arr = get_y_coordinates(x_arr)
     zip_combine_concat(initial_arr, frame_arr, x_arr, y_arr)
   end
 
   def up(initial_arr, x_increment)
     frame_arr = []
     x_arr = []
-    y_arr = []
     current_x_coordinate = 0 + x_increment
     ((@starting_frame + 1)..(@ending_frame - 1)).each do |frame|
       frame_arr.push(frame)
       x_arr.push(current_x_coordinate)
       current_x_coordinate += x_increment
     end
-    x_arr.each do |x|
-      y_arr.push(calculate_y(x))
-    end
+    y_arr = get_y_coordinates(x_arr)
     zip_combine_concat(initial_arr, frame_arr, x_arr, y_arr)
   end
 
   def down(initial_arr, x_increment)
     frame_arr = []
     x_arr = []
-    y_arr = []
     current_x_coordinate = 0 + x_increment
     ((@starting_frame + 1)..(@ending_frame - 1)).each do |frame|
       frame_arr.push(frame)
       x_arr.push(current_x_coordinate)
       current_x_coordinate += x_increment
     end
-    x_arr.each do |x|
-      y_arr.push(calculate_y(x))
-    end
+    y_arr = get_y_coordinates(x_arr)
     zip_combine_concat(initial_arr, frame_arr, x_arr, y_arr.reverse)
   end
 
   def forward_and_up(initial_arr, x_increment)
     frame_arr = []
     x_arr = []
-    y_arr = []
     current_x_coordinate = @starting_coordinate[0] + x_increment
     ((@starting_frame + 1)..(@ending_frame - 1)).each do |frame|
       frame_arr.push(frame)
       x_arr.push(current_x_coordinate)
       current_x_coordinate += x_increment
     end
-    x_arr.each do |x|
-      y_arr.push(calculate_y(x))
-    end
+    y_arr = get_y_coordinates(x_arr)
     zip_combine_concat(initial_arr, frame_arr, x_arr, y_arr)
   end
 
   def forward_and_down(initial_arr, x_increment)
     frame_arr = []
     x_arr = []
-    y_arr = []
     current_x_coordinate = @starting_coordinate[0] + x_increment
     ((@starting_frame + 1)..(@ending_frame - 1)).each do |frame|
       frame_arr.push(frame)
       x_arr.push(current_x_coordinate)
       current_x_coordinate += x_increment
     end
-    x_arr.each do |x|
-      y_arr.push(calculate_y(x))
-    end
+    y_arr = get_y_coordinates(x_arr)
     zip_combine_concat(initial_arr, frame_arr, x_arr, y_arr.reverse)
   end
 
   def back_and_up(initial_arr, x_increment)
     frame_arr = []
     x_arr = []
-    y_arr = []
     current_x_coordinate = @starting_coordinate[0] - x_increment
     ((@starting_frame + 1)..(@ending_frame - 1)).each do |frame|
       frame_arr.push(frame)
       x_arr.push(current_x_coordinate)
       current_x_coordinate -= x_increment
     end
-    x_arr.each do |x|
-      y_arr.push(calculate_y(x))
-    end
+    y_arr = get_y_coordinates(x_arr)
     zip_combine_concat(initial_arr, frame_arr, x_arr, y_arr.reverse)
   end
 
   def back_and_down(initial_arr, x_increment)
     frame_arr = []
     x_arr = []
-    y_arr = []
     current_x_coordinate = @starting_coordinate[0] - x_increment
     ((@starting_frame + 1)..(@ending_frame - 1)).each do |frame|
       frame_arr.push(frame)
       x_arr.push(current_x_coordinate)
       current_x_coordinate -= x_increment
     end
-    x_arr.each do |x|
-      y_arr.push(calculate_y(x))
-    end
+    y_arr = get_y_coordinates(x_arr)
     zip_combine_concat(initial_arr, frame_arr, x_arr, y_arr)
   end
 
@@ -267,6 +240,20 @@ class PositionByFrameGen
     else
       initial_arr.concat(combined_arr)
     end
+  end
+
+  def get_y_coordinates(x_arr)
+    y_arr = []
+    if @direction == "none" || @direction == "forward" || @direction == "back"
+      x_arr.each do |x|
+        y_arr.push(@starting_coordinate[1])
+      end
+    else
+      x_arr.each do |x|
+        y_arr.push(calculate_y(x))
+      end
+    end
+    y_arr
   end
 
 end
