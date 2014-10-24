@@ -91,13 +91,19 @@ class PositionByFrameGen
     when "none"
       arr = no_movement(arr)
     when "forward"
-        arr = forward(arr, x_increment)
+      arr = forward(arr, x_increment)
     when "back"
       arr = back(arr, x_increment)
     when "up"
-      arr = up(arr)
+      @horizontal_coordinate_difference = TEN
+      @midpoint[0] = FIVE
+      x_increment = 1
+      arr = up(arr, x_increment)
     when "down"
-      arr = down(arr)
+      @horizontal_coordinate_difference = TEN
+      @midpoint[0] = FIVE
+      x_increment = 1
+      arr = down(arr, x_increment)
     when "forwardAndUp"
       arr = forward_and_up(arr, x_increment)
     when "forwardAndDown"
@@ -122,9 +128,7 @@ class PositionByFrameGen
     x_arr.each do |x|
       y_arr.push(@starting_coordinate[1])
     end
-    coordinate_arr = x_arr.zip(y_arr)
-    combined_arr = frame_arr.zip(coordinate_arr)
-    initial_arr.concat(combined_arr)
+    zip_combine_concat(initial_arr, frame_arr, x_arr, y_arr)
   end
 
   def forward(initial_arr, x_increment)
@@ -140,9 +144,7 @@ class PositionByFrameGen
     x_arr.each do |x|
       y_arr.push(@starting_coordinate[1])
     end
-    coordinate_arr = x_arr.zip(y_arr)
-    combined_arr = frame_arr.zip(coordinate_arr)
-    initial_arr.concat(combined_arr)
+    zip_combine_concat(initial_arr, frame_arr, x_arr, y_arr)
   end
 
   def back(initial_arr, x_increment)
@@ -158,15 +160,10 @@ class PositionByFrameGen
     x_arr.each do |x|
       y_arr.push(@starting_coordinate[1])
     end
-    coordinate_arr = x_arr.zip(y_arr)
-    combined_arr = frame_arr.zip(coordinate_arr)
-    initial_arr.concat(combined_arr)
+    zip_combine_concat(initial_arr, frame_arr, x_arr, y_arr)
   end
 
-  def up(initial_arr)
-    @horizontal_coordinate_difference = TEN
-    @midpoint[0] = FIVE
-    x_increment = 1
+  def up(initial_arr, x_increment)
     frame_arr = []
     x_arr = []
     y_arr = []
@@ -184,10 +181,7 @@ class PositionByFrameGen
     initial_arr.concat(combined_arr).each{ |x| x[1][0] = @starting_coordinate[0] }
   end
 
-  def down(initial_arr)
-    @horizontal_coordinate_difference = TEN
-    @midpoint[0] = FIVE
-    x_increment = 1
+  def down(initial_arr, x_increment)
     frame_arr = []
     x_arr = []
     y_arr = []
@@ -218,9 +212,7 @@ class PositionByFrameGen
     x_arr.each do |x|
       y_arr.push(calculate_y(x))
     end
-    coordinate_arr = x_arr.zip(y_arr)
-    combined_arr = frame_arr.zip(coordinate_arr)
-    initial_arr.concat(combined_arr)
+    zip_combine_concat(initial_arr, frame_arr, x_arr, y_arr)
   end
 
   def forward_and_down(initial_arr, x_increment)
@@ -236,9 +228,7 @@ class PositionByFrameGen
     x_arr.each do |x|
       y_arr.push(calculate_y(x))
     end
-    coordinate_arr = x_arr.zip(y_arr.reverse)
-    combined_arr = frame_arr.zip(coordinate_arr)
-    initial_arr.concat(combined_arr)
+    zip_combine_concat(initial_arr, frame_arr, x_arr, y_arr.reverse)
   end
 
   def back_and_up(initial_arr, x_increment)
@@ -254,9 +244,7 @@ class PositionByFrameGen
     x_arr.each do |x|
       y_arr.push(calculate_y(x))
     end
-    coordinate_arr = x_arr.zip(y_arr.reverse)
-    combined_arr = frame_arr.zip(coordinate_arr)
-    initial_arr.concat(combined_arr)
+    zip_combine_concat(initial_arr, frame_arr, x_arr, y_arr.reverse)
   end
 
   def back_and_down(initial_arr, x_increment)
@@ -272,6 +260,10 @@ class PositionByFrameGen
     x_arr.each do |x|
       y_arr.push(calculate_y(x))
     end
+    zip_combine_concat(initial_arr, frame_arr, x_arr, y_arr)
+  end
+
+  def zip_combine_concat(initial_arr, frame_arr, x_arr, y_arr)
     coordinate_arr = x_arr.zip(y_arr)
     combined_arr = frame_arr.zip(coordinate_arr)
     initial_arr.concat(combined_arr)
