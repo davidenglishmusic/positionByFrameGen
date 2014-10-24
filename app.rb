@@ -176,9 +176,7 @@ class PositionByFrameGen
     x_arr.each do |x|
       y_arr.push(calculate_y(x))
     end
-    coordinate_arr = x_arr.zip(y_arr)
-    combined_arr = frame_arr.zip(coordinate_arr)
-    initial_arr.concat(combined_arr).each{ |x| x[1][0] = @starting_coordinate[0] }
+    zip_combine_concat(initial_arr, frame_arr, x_arr, y_arr)
   end
 
   def down(initial_arr, x_increment)
@@ -194,9 +192,7 @@ class PositionByFrameGen
     x_arr.each do |x|
       y_arr.push(calculate_y(x))
     end
-    coordinate_arr = x_arr.zip(y_arr.reverse)
-    combined_arr = frame_arr.zip(coordinate_arr)
-    initial_arr.concat(combined_arr).each{ |x| x[1][0] = @starting_coordinate[0] }
+    zip_combine_concat(initial_arr, frame_arr, x_arr, y_arr.reverse)
   end
 
   def forward_and_up(initial_arr, x_increment)
@@ -266,7 +262,11 @@ class PositionByFrameGen
   def zip_combine_concat(initial_arr, frame_arr, x_arr, y_arr)
     coordinate_arr = x_arr.zip(y_arr)
     combined_arr = frame_arr.zip(coordinate_arr)
-    initial_arr.concat(combined_arr)
+    if @direction == "down" || @direction == "up"
+      initial_arr.concat(combined_arr).each{ |x| x[1][0] = @starting_coordinate[0] }
+    else
+      initial_arr.concat(combined_arr)
+    end
   end
 
 end
